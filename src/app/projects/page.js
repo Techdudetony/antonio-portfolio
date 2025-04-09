@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import projectSummaries from "./projectSummaries";
 import Link from "next/link";
+import { filter } from "framer-motion/client";
+import { SiLandrover } from "react-icons/si";
 
 export default function ProjectsPage() {
     const [repos, setRepos] = useState([]);
@@ -18,7 +20,7 @@ export default function ProjectsPage() {
 
     const renderProjectSummary = () => {
         if (!currentRepo) return null;
-        const summary = projectSummaries[currentRepo.name];
+        const summary = projectSummaries[currentRepo.name]?.summary;
         return (
             <p className="text-base leading-relaxed text-gray-300 mt-6">
                 {summary || "No additional summary provided for this project."}
@@ -51,45 +53,41 @@ export default function ProjectsPage() {
     };
 
     useEffect(() => {
-        fetch("https://api.github.com/users/techdudetony/repos?sort=updated")
-            .then((res) => res.json())
-            .then((data) => {
+        const fetchReposAndLanguages = async () => {
+            try {
+                const response = await fetch("https://api.github.com/users/techdudetony/repos?sort=updated");
+                const data = await response.json();
                 const filtered = data.filter((repo) => !repo.fork);
-                setRepos(filtered);
+
+                // Fetch languages for each repo dynamically
+                const enrichedRepos = await Promise.all(
+                    filtered.map(async (repo) => {
+                        const langRes = await fetch(repo.languages_url);
+                        const languages = await langRes.json();
+                        return { ...repo, languages };
+                    })
+                );
+
+                // Add external project manually (with dummy languages if needed)
+                const externalProject = {
+                    name: "Project_Aura_Bloom",
+                    description: "A collaborative mental health app for mood tracking and support.",
+                    html_url: "https://github.com/asandoval557/Project_Aura_Bloom",
+                    languages: { Kotlin: 1 }, // You can customize this
+                };
+
+                setRepos([...enrichedRepos, externalProject]);
                 setIsLoadingRepos(false);
-                setReposError(filtered.length === 0);
-            })
-            .catch((err) => {
-                console.error("GitHub API error:", err);
+                setReposError(enrichedRepos.length === 0);
+            } catch (error) {
+                console.error("GitHub API error:", error);
                 setIsLoadingRepos(false);
                 setReposError(true);
-            });
-    }, []);
+            }
+        };
 
-    useEffect(() => {
-        fetch("https://api.github.com/users/techdudetony/repos?sort=updated")
-          .then((res) => res.json())
-          .then((data) => {
-            const filtered = data.filter((repo) => !repo.fork);
-      
-            // 👇 Append external repo manually
-            const externalProject = {
-              name: "Project_Aura_Bloom",
-              description: "Collaborative cognitive quiz project",
-              html_url: "https://github.com/asandoval557/Project_Aura_Bloom",
-            };
-      
-            setRepos([...filtered, externalProject]);
-            setIsLoadingRepos(false);
-            setReposError(filtered.length === 0);
-          })
-          .catch((err) => {
-            console.error("GitHub API error:", err);
-            setIsLoadingRepos(false);
-            setReposError(true);
-          });
-      }, []);
-      
+        fetchReposAndLanguages();
+    }, []);
 
     const totalPages = Math.ceil(repos.length / perPage);
     const currentRepo = repos[currentPage];
@@ -170,7 +168,19 @@ export default function ProjectsPage() {
                                 >
                                     {currentRepo && (
                                         <div className="flex flex-col items-center justify-center text-center p-8 bg-gray-900/60 border border-cyan-600 rounded-xl shadow-lg w-full">
-                                            <div className="text-6xl mb-4">🚀</div>
+                                            {/* Icon */}
+                                            <img
+                                                src={projectSummaries[currentRepo.name]?.icon || "/pixelated-portfolio.png"}
+                                                alt={`${currentRepo.name} Icon`}
+                                                className="w-24 h-24 mb-4 rounded-full shadow-md"
+                                            />
+                                            {/* Project Title */}
+                                            <h2 className="text-2xl font-bold text-cyan-400">{currentRepo.name}</h2>
+                                            {/* Project Description */}
+                                            <p className="text-gray-300 mt-2 mb-4">
+                                                {currentRepo.description || "No description provided."}
+                                            </p>
+                                            {/* More Info Button */}
                                             <button
                                                 onClick={() => setShowDetails(true)}
                                                 className="mt-6 text-cyan-400 hover:text-cyan-300 text-lg sm:text-xl transition font-semibold flex items-center gap-2"
@@ -179,18 +189,6 @@ export default function ProjectsPage() {
                                                 <span>More Info</span>
                                                 <span className="text-2xl">➡</span>
                                             </button>
-                                            <h2 className="text-2xl font-bold text-cyan-400">{currentRepo.name}</h2>
-                                            <p className="text-gray-300 mt-2 mb-4">
-                                                {currentRepo.description || "No description provided."}
-                                            </p>
-                                            <a
-                                                href={currentRepo.html_url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-cyan-400 hover:underline"
-                                            >
-                                                View on GitHub →
-                                            </a>
                                         </div>
                                     )}
                                 </motion.div>
@@ -219,7 +217,17 @@ export default function ProjectsPage() {
                             >
                                 View on GitHub →
                             </a>
-
+                            <div className="flex flex-wrap gap-2 mt-3">
+                                {currentRepo.languages &&
+                                    Object.keys(currentRepo.languages).map((lang) => (
+                                        <span
+                                            key={lang}
+                                            className="bg-cyan-700 text-white text-xs px-2 py-1 rounded-full"
+                                        >
+                                            {lang}
+                                        </span>
+                                    ))}
+                            </div>
                             <button
                                 onClick={() => setShowDetails(false)}
                                 className="absolute bottom-6 left-6 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold px-4 py-2 rounded transition"
