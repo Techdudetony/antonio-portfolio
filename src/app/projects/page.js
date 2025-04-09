@@ -230,7 +230,7 @@ export default function ProjectsPage() {
                             </div>
                             <button
                                 onClick={() => setShowDetails(false)}
-                                className="absolute bottom-6 left-6 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold px-4 py-2 rounded transition"
+                                className="mt-8 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold px-4 py-2 rounded transition"
                             >
                                 ← Back
                             </button>
