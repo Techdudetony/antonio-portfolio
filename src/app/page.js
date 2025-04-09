@@ -298,8 +298,9 @@ export default function Home() {
               centeredSlides={true}
               slidesPerView="auto"
               loop={true}
+              speed={700} // spped in ms for smooth transition
               autoplay={{
-                delay: 2500, // 2.5 secs between slides
+                delay: 1500, // 0.5 secs between slides
                 disableOnInteraction: false // Keeps autoplay running even after manual swipes
               }}
               coverflowEffect={{
@@ -320,7 +321,7 @@ export default function Home() {
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.2 }}
+                    transition={{ duration: 0.5 }}
                     className="bg-gray-800 border border-cyan-600 rounded-xl p-6 shadow-lg h-60 w-64 flex flex-col justify-center items-center"
                   >
                     <h3 className="text-xl font-bold text-cyan-400">{item.year}</h3>
