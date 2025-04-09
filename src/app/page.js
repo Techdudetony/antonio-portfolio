@@ -334,7 +334,7 @@ export default function Home() {
 
         {/* Contact Section */}
         <section id="contact" className="relative z-10 px-8 py-20 max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4">Let's Connect</h2>
+          <h2 className="text-3xl font-bold mb-4"><p>Let&apos;s Connect</p></h2>
           <p className="mb-6 text-gray-400">Want to collaborate, chat tech, or share con stories? Hit me up 👇</p>
 
           <div className="flex flex-wrap gap-4 mb-6">
