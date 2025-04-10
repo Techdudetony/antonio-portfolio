@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import "@fontsource/press-start-2p";
 import "./globals.css";
 import PageTransitionWrapper from "./components/PageTransitionWrapper";
 
@@ -20,6 +21,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        {/* ✅ Optional: You could add meta tags here if needed */}
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <PageTransitionWrapper>
           {children}

@@ -135,7 +135,7 @@ export default function Home() {
       // Handle the last 2 points
       ctx.lineTo(trail[trail.length - 1].x, trail[trail.length - 1].y);
       
-      ctx.strokeStyle = "rgb(0, 153, 255)";
+      ctx.strokeStyle = "rgb(0, 255, 0)";
       ctx.lineWidth = 1.5;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
@@ -160,7 +160,7 @@ export default function Home() {
     { year: "2012", label: "Started College" },
     { year: "2013", label: "Crew Trainer at Hardees" },
     { year: "2015", label: "Operations Supervisor at AC Moore" },
-    { year: "2017", label: "Mechanic/Quality Control at Direct Mail Solutions" },
+    { year: "2017", label: "Mechanic/QC at Direct Mail Solutions" },
     { year: "2019", label: "Joined the US Army" },
     { year: "2020", label: "QA Consultant at CarMax" },
     { year: "2023", label: "Full Sail University: Computer Science program begins" },
@@ -177,7 +177,7 @@ export default function Home() {
       />
 
 
-      <main className="relative min-h-screen text-white bg-gradient-to-br from-black via-gray-900 to-black overflow-hidden">
+      <main className="relative min-h-screen bg-black overflow-hidden">
         {/* Spotlight Layer */}
         <div
           ref={spotlightRef}
@@ -185,13 +185,13 @@ export default function Home() {
         />
 
         {/* Sticky Nav */}
-        <nav className="sticky top-0 z-50 backdrop-blur-md bg-black/50 px-6 py-4 flex justify-between items-center">
+        <nav className="sticky top-0 z-50 backdrop-blur-md bg-black/50 px-8 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">Antonio Lee</h1>
-          <div className="space-x-6">
-            <a href="#about" className="hover:text-cyan-400 transition">About</a>
-            <Link href="/projects" className="hover:text-cyan-400 transition">Projects</Link>
-            <a href="/resume.pdf" className="hover:text-cyan-400 transition" target="_blank" rel="noopener noreferrer">Resume</a>
-            <a href="#contact" className="hover:text-cyan-400 transition">Contact</a>
+          <div className="space-x-8">
+            <a href="#about" className="hover:text-lime transition">About</a>
+            <Link href="/projects" className="hover:text-lime transition">Projects</Link>
+            <a href="/resume.pdf" className="hover:text-lime transition" target="_blank" rel="noopener noreferrer">Resume</a>
+            <a href="#contact" className="hover:text-lime transition">Contact</a>
           </div>
         </nav>
 
@@ -300,7 +300,7 @@ export default function Home() {
               loop={true}
               speed={700} // spped in ms for smooth transition
               autoplay={{
-                delay: 1500, // 0.5 secs between slides
+                delay: 1500, // 1.5 secs between slides
                 disableOnInteraction: false // Keeps autoplay running even after manual swipes
               }}
               coverflowEffect={{
@@ -311,7 +311,7 @@ export default function Home() {
                 slideShadows: true,
               }}
               pagination={{ clickable: true }}
-              className="timeline-swiper max-w-4xl mx-auto"
+              className="timeline-swiper max-w-4xl mx-auto pb-10"
             >
               {timelineItems.map((item, i) => (
                 <SwiperSlide
@@ -322,9 +322,9 @@ export default function Home() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="bg-gray-800 border border-cyan-600 rounded-xl p-6 shadow-lg h-60 w-64 flex flex-col justify-center items-center"
+                    className="bg-gray-1000 border border-lime rounded-none p-8 shadow-lg h-64 w-64 flex flex-col justify-center items-center"
                   >
-                    <h3 className="text-xl font-bold text-cyan-400">{item.year}</h3>
+                    <h3 className="text-xl font-bold text-lime">{item.year}</h3>
                     <p className="text-gray-200 mt-2 text-center">{item.label}</p>
                   </motion.div>
                 </SwiperSlide>
@@ -343,7 +343,8 @@ export default function Home() {
               whileHover={{ scale: 1.05, x: 5, y: -2 }}
               transition={{ type: 'spring', stiffness: 300 }}
               href="mailto:aaleejr12@gmail.com"
-              className="inline-block bg-cyan-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-cyan-400 transition"
+              className="font-pixel text-pixel-foreground bg-pixel-background border-4 border-pixel-border px-6 py-4 transition-all 
+              duration-150 hover:bg-[#00ff00] hover:text-black hover:border-[#00ff00] hover:shadow-[0_0_10px_#00ff00]"
             >
               📬 Email Me
             </motion.a>
@@ -352,7 +353,8 @@ export default function Home() {
               transition={{ type: 'spring', stiffness: 300 }}
               href="https://github.com/techdudetony"
               target="_blank"
-              className="inline-block bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition"
+              className="font-pixel text-pixel-foreground bg-pixel-background border-4 border-pixel-border px-6 py-4 transition-all 
+              duration-150 hover:bg-[#00ff00] hover:text-black hover:border-[#00ff00] hover:shadow-[0_0_10px_#00ff00]"
             >
               🖥️ GitHub
             </motion.a>
@@ -361,7 +363,8 @@ export default function Home() {
               transition={{ type: 'spring', stiffness: 300 }}
               href="https://linkedin.com/in/antonioleejr"
               target="_blank"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 transition"
+              className="font-pixel text-pixel-foreground bg-pixel-background border-4 border-pixel-border px-6 py-4 transition-all 
+              duration-150 hover:bg-[#00ff00] hover:text-black hover:border-[#00ff00] hover:shadow-[0_0_10px_#00ff00]"
             >
               💼 LinkedIn
             </motion.a>

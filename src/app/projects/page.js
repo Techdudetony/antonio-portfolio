@@ -22,7 +22,7 @@ export default function ProjectsPage() {
         if (!currentRepo) return null;
         const summary = projectSummaries[currentRepo.name]?.summary;
         return (
-            <p className="text-base leading-relaxed text-gray-300 mt-6">
+            <p className="text-base leading-relaxed text-white mt-6">
                 {summary || "No additional summary provided for this project."}
             </p>
         );
@@ -113,7 +113,7 @@ export default function ProjectsPage() {
     };
 
     return (
-        <main className="min-h-screen bg-black text-white px-8 py-20 overflow-hidden">
+        <main className="min-h-screen bg-black text-[#00f00] px-8 py-20 overflow-hidden">
             <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -122,9 +122,9 @@ export default function ProjectsPage() {
             >
                 <Link
                     href="/"
-                    className="text-cyan-400 hover:text-cyan-300 font-semibold border border-cyan-400 hover:border-cyan-300 px-4 py-2 rounded transition"
+                    className="text-[#00ff00] hover:text-black font-semibold border border-[#00f00] hover:border-[#00ff00] hover:bg-[#00ff00] px-4 py-2 rounded transition"
                 >
-                    ← Back to Home
+                    <span className="text-3xl mr-1">←</span> Back to Home
                 </Link>
             </motion.div>
 
@@ -134,19 +134,19 @@ export default function ProjectsPage() {
                 transition={{ duration: 0.7 }}
                 className="text-4xl font-bold text-center mb-10"
             >
-                My GitHub Projects
+                My Projects
             </motion.h1>
 
             <div className="relative max-w-6xl mx-auto h-[500px]">
                 {isLoadingRepos ? (
                     <div className="flex justify-center items-center h-full">
                         <motion.div
-                            className="w-10 h-10 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"
+                            className="w-10 h-10 border-4 border-[#00ff00] border-t-transparent rounded-full animate-spin"
                             role="status"
                         />
                     </div>
                 ) : reposError ? (
-                    <div className="text-center text-gray-400">No projects available.</div>
+                    <div className="text-center text-white">No projects available.</div>
                 ) : (
                     <div
                         onWheel={handleWheel}
@@ -167,7 +167,7 @@ export default function ProjectsPage() {
                                     className="flex items-center justify-center absolute w-full"
                                 >
                                     {currentRepo && (
-                                        <div className="flex flex-col items-center justify-center text-center p-8 bg-gray-900/60 border border-cyan-600 rounded-xl shadow-lg w-full">
+                                        <div className="flex flex-col items-center justify-center text-center p-8 bg-black border-4 border-[#00ff00] rounded-xl shadow-lg w-full">
                                             {/* Icon */}
                                             <img
                                                 src={projectSummaries[currentRepo.name]?.icon || "/pixelated-portfolio.png"}
@@ -175,15 +175,15 @@ export default function ProjectsPage() {
                                                 className="w-24 h-24 mb-4 rounded-full shadow-md"
                                             />
                                             {/* Project Title */}
-                                            <h2 className="text-2xl font-bold text-cyan-400">{currentRepo.name}</h2>
+                                            <h2 className="text-2xl font-bold text-[#00ff00]">{currentRepo.name}</h2>
                                             {/* Project Description */}
-                                            <p className="text-gray-300 mt-2 mb-4">
+                                            <p className="text-white mt-2 mb-4">
                                                 {currentRepo.description || "No description provided."}
                                             </p>
                                             {/* More Info Button */}
                                             <button
                                                 onClick={() => setShowDetails(true)}
-                                                className="mt-6 text-cyan-400 hover:text-cyan-300 text-lg sm:text-xl transition font-semibold flex items-center gap-2"
+                                                className="mt-6 text-[#00ff00] hover:text-[#a6ffa6] text-lg sm:text-xl transition font-semibold flex items-center gap-2"
                                                 aria-label="View more"
                                             >
                                                 <span>More Info</span>
@@ -205,24 +205,25 @@ export default function ProjectsPage() {
                             animate={{ x: 0 }}
                             exit={{ x: "100%" }}
                             transition={{ duration: 0.5 }}
-                            className="fixed top-0 right-0 h-full w-full md:w-1/2 bg-gray-900 z-50 shadow-xl p-10 overflow-y-auto"
+                            className="fixed top-0 right-0 h-full w-full md:w-1/2 bg-black border-2 border-[#00ff00] z-50 shadow-xl p-10 overflow-y-auto"
                         >
-                            <h2 className="text-3xl font-bold text-cyan-400 mb-4">{currentRepo.name}</h2>
-                            <p className="text-gray-300 mb-6">{currentRepo.description || "No description provided."}</p>
+                            <h2 className="text-3xl font-bold text-[#00ff00] mb-4">{currentRepo.name}</h2>
+                            <p className="text-white mb-4">{currentRepo.description || "No description provided."}</p>
                             <a
                                 href={currentRepo.html_url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-block text-cyan-400 underline hover:text-cyan-300 mb-8"
+                                className="inline-block text-[#00ff00] underline hover:text-[#a6ffa6] mb-8"
                             >
-                                View on GitHub →
+                                <span>View on GitHub </span> 
+                                <span className="text-4xl">→</span>
                             </a>
-                            <div className="flex flex-wrap gap-2 mt-3">
+                            <div className="flex flex-wrap gap-4 mt-4">
                                 {currentRepo.languages &&
                                     Object.keys(currentRepo.languages).map((lang) => (
                                         <span
                                             key={lang}
-                                            className="bg-cyan-700 text-white text-xs px-2 py-1 rounded-full"
+                                            className="bg-[#00ff00] text-black text-s px-2 py-1 rounded-full"
                                         >
                                             {lang}
                                         </span>
@@ -230,11 +231,11 @@ export default function ProjectsPage() {
                             </div>
                             <button
                                 onClick={() => setShowDetails(false)}
-                                className="mt-8 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold px-4 py-2 rounded transition"
+                                className="mt-8 bg-black text-[#00ff00] border border-[#00ff00] hover:bg-[#00ff00] hover:text-black font-semibold px-4 py-2 rounded transition"
                             >
                                 ← Back
                             </button>
-                            <div className="prose prose-invert max-w-none text-gray-300 mt-6">
+                            <div className="prose prose-invert max-w-none text-white mt-8">
                                 {renderProjectSummary()}
                             </div>
                         </motion.div>

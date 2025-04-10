@@ -31,7 +31,7 @@ export default function PageTransitionWrapper({ children }) {
                         animate={{ clipPath: "inset(0 0% 0 0)" }}
                         exit={{ clipPath: "inset(0 0% 0 100%)" }}
                         transition={{ duration: 1.0, ease: "easeInOut" }}
-                        className="fixed inset-0 z-[100] bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center"
+                        className="fixed inset-0 z-[100] bg-[#00ff00] border-y-8 border-lime flex items-center justify-center"
                     >
                         {/* 🔥 Logo or Initials in Center */}
                         <motion.img
