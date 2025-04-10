@@ -4,8 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import projectSummaries from "./projectSummaries";
 import Link from "next/link";
-import { filter } from "framer-motion/client";
-import { SiLandrover } from "react-icons/si";
+import { Typewriter } from "react-simple-typewriter";
 
 export default function ProjectsPage() {
     const [repos, setRepos] = useState([]);
@@ -129,12 +128,20 @@ export default function ProjectsPage() {
             </motion.div>
 
             <motion.h1
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7 }}
-                className="text-4xl font-bold text-center mb-10"
+                transition={{ duration: 0.8 }}
+                className="text-5xl font-extrabold text-[#00ff00] text-center mb-12 font-pixel text-center"
             >
-                My Projects
+                <Typewriter
+                    words={["My Projects", "Featured Builds", "Creative Work"]}
+                    loop={0}
+                    cursor
+                    cursorStyle="|"
+                    typeSpeed={80}
+                    deleteSpeed={40}
+                    delaySpeed={1000}
+                />
             </motion.h1>
 
             <div className="relative max-w-6xl mx-auto h-[500px]">
@@ -215,7 +222,7 @@ export default function ProjectsPage() {
                                 rel="noopener noreferrer"
                                 className="inline-block text-[#00ff00] underline hover:text-[#a6ffa6] mb-8"
                             >
-                                <span>View on GitHub </span> 
+                                <span>View on GitHub </span>
                                 <span className="text-4xl">→</span>
                             </a>
                             <div className="flex flex-wrap gap-4 mt-4">

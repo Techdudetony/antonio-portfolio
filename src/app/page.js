@@ -190,6 +190,7 @@ export default function Home() {
           <div className="space-x-8">
             <a href="#about" className="hover:text-lime transition">About</a>
             <Link href="/projects" className="hover:text-lime transition">Projects</Link>
+            <Link href="/designs" className="hover:text-lime transition">Designs</Link>
             <a href="/resume.pdf" className="hover:text-lime transition" target="_blank" rel="noopener noreferrer">Resume</a>
             <a href="#contact" className="hover:text-lime transition">Contact</a>
           </div>
@@ -336,7 +337,7 @@ export default function Home() {
         {/* Contact Section */}
         <section id="contact" className="relative z-10 px-8 py-20 max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-4"><p>Let&apos;s Connect</p></h2>
-          <p className="mb-6 text-gray-400">Want to collaborate, chat tech, or share con stories? Hit me up 👇</p>
+          <p className="mb-6 text-white">Want to collaborate, chat tech, or share con stories? Hit me up 👇</p>
 
           <div className="flex flex-wrap gap-4 mb-6">
             <motion.a

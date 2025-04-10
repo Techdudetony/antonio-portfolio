@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
       <head>
         {/* ✅ Optional: You could add meta tags here if needed */}
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased cursor-none`}>
         <PageTransitionWrapper>
           {children}
         </PageTransitionWrapper>

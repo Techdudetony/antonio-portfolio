@@ -24,6 +24,13 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Press Start 2P', monospace;
+  cursor: url("/greencursor.png") 0 0, auto;
+}
+
+a:hover,
+button:hover,
+.cursor-pointer:hover {
+  cursor: url('/greenhand.png') 0 0, auto;
 }
 
 /* ==== Swiper Dots Custom Styling ==== */
