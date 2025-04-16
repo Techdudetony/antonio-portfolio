@@ -225,7 +225,7 @@ export default function ProjectsPage() {
                         // 🗂️ Grid View
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-20 gap-y-4">
                             {repos.map((repo) => (
-                                <div key={repo.name} className="flip-card w-100 h-85 relative">
+                                <div key={repo.name} className="flip-card w-95 sm:w-80 md:w-96 h-80 sm:h-96 mx-auto">
                                     <div className="flip-inner w-full h-full relative">
                                         {/* FRONT FACE */}
                                         <div className="flip-front flex flex-col items-center justify-center text-center">

@@ -54,23 +54,49 @@ export default function Home() {
 
         {/* Sticky Nav */}
         <nav className="sticky top-0 z-50 backdrop-blur-md bg-black/50 px-8 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold">Antonio Lee</h1>
-          {/* Desktop Menu */}
-          <div className="space-x-8">
+          <h1 className="text-2xl sm:text:2xl font-bold text-[#00ff00] font-pixel">Antonio Lee</h1>
+
+          {/* Desktop Menu (hidden on small screens) */}
+          <div className="hidden md:flex space-x-8 text-[#00ff00] font-pixel">
             <a href="#about" className="hover:text-lime transition">About</a>
             <Link href="/projects" className="hover:text-lime transition">Projects</Link>
             <Link href="/designs" className="hover:text-lime transition">Designs</Link>
             <a href="/resume.pdf" className="hover:text-lime transition" target="_blank" rel="noopener noreferrer">Resume</a>
             <a href="#contact" className="hover:text-lime transition">Contact</a>
           </div>
-          {/* Mobile Hamburger */}
-          <button
+
+          <motion.button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden text-[#00ff00] text-3xl focus:outline-none"
             aria-label="Toggle Menu"
+            className="md:hidden w-12 h-12 flex flex-col items-center justify-center gap-1 p-2 z-50 fixed top-4 right-4"
+            initial={false}
+            animate={menuOpen ? "open" : "closed"}
           >
-            ☰
-          </button>
+            <motion.span
+              className="block w-8 h-[2px] bg-[#00ff00] origin-center"
+              variants={{
+                open: { rotate: 45, y: 5 },
+                closed: { rotate: 0, y: 0 },
+              }}
+              transition={{ duration: 0.3 }}
+            />
+            <motion.span
+              className="block w-8 h-[2px] bg-[#00ff00] origin-center"
+              variants={{
+                open: { opacity: 0 },
+                closed: { opacity: 1 },
+              }}
+              transition={{ duration: 0.2 }}
+            />
+            <motion.span
+              className="block w-8 h-[2px] bg-[#00ff00] origin-center"
+              variants={{
+                open: { rotate: -45, y: -5 },
+                closed: { rotate: 0, y: 0 },
+              }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.button>
         </nav>
 
         {/* Mobile Full-Screen Menu */}
@@ -89,7 +115,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl font-extrabold mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6"
           >
             <Typewriter
               words={["QA Consultant.", "Developer.", "Cosplayer.", "Dog Dad.", "AI Enthusiast."]}

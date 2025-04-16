@@ -61,38 +61,49 @@ export default function DesignsPage() {
 
     return (
         <main className="min-h-screen bg-black text-[#00ff00] font-pixel p-8 space-y-12">
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4 }}
-                className="absolute top-6 left-6 sm:top-10 sm:left-10 z-50"
-            >
-                <Link
-                    href="/"
-                    className="text-[#00ff00] hover:text-black font-semibold border border-[#00f00] hover:border-[#00ff00] hover:bg-[#00ff00] px-4 py-2 rounded transition"
-                >
-                    <span className="text-3xl mr-1">←</span> Back to Home
-                </Link>
-            </motion.div>
+            {/* Header Container */}
+            <div className="flex flex-col items-center sm:block relative z-10 mb-12 px-4 sm:px-0">
 
-            <motion.h1
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="text-5xl font-extrabold text-[#00ff00] text-center mb-12 font-pixel text-center"
+                {/* Back Button */}
+                <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="mb-6 sm:mb-0 sm:absolute sm:top-10 sm:left-10"
+                >
+                    <Link
+                        href="/"
+                        className="text-[#00ff00] hover:text-black font-semibold border border-[#00f00] hover:border-[#00ff00] hover:bg-[#00ff00] px-4 py-2 rounded transition font-pixel"
+                    >
+                        <span className="text-3xl mr-1">←</span> Back to Home
+                    </Link>
+                </motion.div>
+
+                {/* Heading with Typewriter */}
+                <motion.h1
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="text-4xl sm:text-5xl font-extrabold text-[#00ff00] font-pixel text-center"
+                >
+                    <Typewriter
+                        words={["🎮 Design Gallery", "UI Experiments", "Design Showcase"]}
+                        loop={0}
+                        cursor
+                        cursorStyle="|"
+                        typeSpeed={80}
+                        deleteSpeed={40}
+                        delaySpeed={1000}
+                    />
+                </motion.h1>
+            </div>
+
+            <div
+                className={`transition-all duration-300 gap-4 ${activeIndex !== null
+                        ? "flex flex-col items-center" // Stack cards vertically when one is open
+                        : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+                    }`}
             >
-                <Typewriter
-                    words={["🎮 Design Gallery", "UI Experiments", "Design Showcase"]}
-                    loop={0}
-                    cursor
-                    cursorStyle="|"
-                    typeSpeed={80}
-                    deleteSpeed={40}
-                    delaySpeed={1000}
-                />
-            </motion.h1>
-            <div className={`grid gap-4 transition-all duration-300 ${
-                activeIndex !== null ? "grid-cols-4" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"}`}>
                 {projects.map((proj, i) => (
                     <DesignCard
                         key={i}

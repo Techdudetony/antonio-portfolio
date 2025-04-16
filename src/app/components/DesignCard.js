@@ -88,15 +88,27 @@ export default function DesignCard({ title, description, images, isActive, onCli
                     className="fixed inset-0 z-[9999] bg-black bg-opacity-90 flex items-center justify-center"
                     onClick={() => setSelectedIndex(null)}
                 >
+                    {/* ❌ Close Button (Mobile Friendly) */}
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedIndex(null);
+                        }}
+                        className="absolute top-4 right-4 text-4xl text-[#00ff00] font-bold z-50"
+                        aria-label="Close"
+                    >
+                        ✕
+                    </button>
+
                     {/* ← Left Arrow */}
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
                             setSelectedIndex((prev) => (prev - 1 + images.length) % images.length);
                         }}
-                        className="absolute left-8 top-1/2 -translate-y-1/2 text-4xl text-lime font-bold z-50"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-5xl text-lime font-bold z-50"
                     >
-                        <span className="text-6xl">←</span>
+                        ←
                     </button>
 
                     {/* Main Image and Caption */}
@@ -121,9 +133,9 @@ export default function DesignCard({ title, description, images, isActive, onCli
                             e.stopPropagation();
                             setSelectedIndex((prev) => (prev + 1) % images.length);
                         }}
-                        className="absolute right-8 top-1/2 -translate-y-1/2 text-4xl text-lime font-bold z-50"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-5xl text-lime font-bold z-50"
                     >
-                        <span className="text-6xl">→</span>
+                        →
                     </button>
                 </div>
             )}
