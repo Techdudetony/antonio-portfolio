@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import projectSummaries from "./projectSummaries";
@@ -13,6 +14,7 @@ export default function ProjectsPage() {
     const [showDetails, setShowDetails] = useState(false);
     const [isLoadingRepos, setIsLoadingRepos] = useState(true);
     const [reposError, setReposError] = useState(false);
+    const [viewMode, setViewMode] = useState("grid");
 
     const [scrollCooldown, setScrollCooldown] = useState(false);
     const touchStartY = useRef(0);
@@ -112,7 +114,12 @@ export default function ProjectsPage() {
     };
 
     return (
-        <main className="min-h-screen bg-black text-[#00f00] px-8 py-20 overflow-hidden">
+        <main
+            className={clsx(
+                "min-h-screen bg-black text-[#00f00] px-8 py-20 transition-all duration-300",
+                viewMode === "grid" ? "overflow-auto" : "overflow-hidden"
+            )}
+        >
             <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -144,65 +151,112 @@ export default function ProjectsPage() {
                 />
             </motion.h1>
 
-            <div className="relative max-w-6xl mx-auto h-[500px]">
-                {isLoadingRepos ? (
-                    <div className="flex justify-center items-center h-full">
-                        <motion.div
-                            className="w-10 h-10 border-4 border-[#00ff00] border-t-transparent rounded-full animate-spin"
-                            role="status"
-                        />
-                    </div>
-                ) : reposError ? (
-                    <div className="text-center text-white">No projects available.</div>
-                ) : (
-                    <div
-                        onWheel={handleWheel}
-                        onTouchStart={handleTouchStart}
-                        onTouchEnd={handleTouchEnd}
-                        className="h-full relative"
-                    >
-                        <div className={`${showDetails ? "blur-sm opacity-40" : "opacity-100"} transition-all duration-300`}>
-                            <AnimatePresence custom={direction} mode="wait">
-                                <motion.div
-                                    key={currentPage}
-                                    custom={direction}
-                                    variants={variants}
-                                    initial="enter"
-                                    animate="center"
-                                    exit="exit"
-                                    transition={{ duration: 0.5 }}
-                                    className="flex items-center justify-center absolute w-full"
-                                >
-                                    {currentRepo && (
-                                        <div className="flex flex-col items-center justify-center text-center p-8 bg-black border-4 border-[#00ff00] rounded-xl shadow-lg w-full">
-                                            {/* Icon */}
-                                            <img
-                                                src={projectSummaries[currentRepo.name]?.icon || "/pixelated-portfolio.png"}
-                                                alt={`${currentRepo.name} Icon`}
-                                                className="w-24 h-24 mb-4 rounded-full shadow-md"
-                                            />
-                                            {/* Project Title */}
-                                            <h2 className="text-2xl font-bold text-[#00ff00]">{currentRepo.name}</h2>
-                                            {/* Project Description */}
-                                            <p className="text-white mt-2 mb-4">
-                                                {currentRepo.description || "No description provided."}
-                                            </p>
-                                            {/* More Info Button */}
-                                            <button
-                                                onClick={() => setShowDetails(true)}
-                                                className="mt-6 text-[#00ff00] hover:text-[#a6ffa6] text-lg sm:text-xl transition font-semibold flex items-center gap-2"
-                                                aria-label="View more"
-                                            >
-                                                <span>More Info</span>
-                                                <span className="text-2xl">➡</span>
-                                            </button>
-                                        </div>
-                                    )}
-                                </motion.div>
-                            </AnimatePresence>
+            <div className="flex justify-center gap-4 mb-8">
+                <button
+                    onClick={() => setViewMode("scroll")}
+                    className={`font-pixel border-2 px-4 py-2 ${viewMode === "scroll" ? "bg-[#00ff00] text-black" : "bg-black text-[#00ff00]"
+                        }`}
+                >
+                    🎰 Scroll View
+                </button>
+                <button
+                    onClick={() => setViewMode("grid")}
+                    className={`font-pixel border-2 px-4 py-2 ${viewMode === "grid" ? "bg-[#00ff00] text-black" : "bg-black text-[#00ff00]"
+                        }`}
+                >
+                    🗂️ Grid View
+                </button>
+            </div>
+
+            <div className={`relative max-w-6xl mx-auto ${viewMode === "scroll" ? "h-[500px]" : "h-auto"}`}>
+                <div className="relative max-w-6xl mx-auto">
+                    {isLoadingRepos ? (
+                        <div className="flex justify-center items-center h-full">
+                            <motion.div className="w-10 h-10 border-4 border-[#00ff00] border-t-transparent rounded-full animate-spin" />
                         </div>
-                    </div>
-                )}
+                    ) : reposError ? (
+                        <div className="text-center text-white">No projects available.</div>
+                    ) : viewMode === "scroll" ? (
+                        // 🎰 Scroll view
+                        <div
+                            onWheel={handleWheel}
+                            onTouchStart={handleTouchStart}
+                            onTouchEnd={handleTouchEnd}
+                            className="h-[500px] relative"
+                        >
+                            <div className={`${showDetails ? "blur-sm opacity-40" : "opacity-100"} transition-all duration-300`}>
+                                <AnimatePresence custom={direction} mode="wait">
+                                    <motion.div
+                                        key={currentPage}
+                                        custom={direction}
+                                        variants={variants}
+                                        initial="enter"
+                                        animate="center"
+                                        exit="exit"
+                                        transition={{ duration: 0.5 }}
+                                        className="flex items-center justify-center absolute w-full"
+                                    >
+                                        {currentRepo && (
+                                            <div className="flex flex-col items-center justify-center text-center p-8 bg-black border-4 border-[#00ff00] rounded-xl shadow-lg w-full">
+                                                <img
+                                                    src={projectSummaries[currentRepo.name]?.icon || "/pixelated-portfolio.png"}
+                                                    alt={`${currentRepo.name} Icon`}
+                                                    className="w-24 h-24 mb-4 rounded-full shadow-md"
+                                                />
+                                                <h2 className="text-2xl font-bold text-[#00ff00]">{currentRepo.name}</h2>
+                                                <p className="text-white mt-2 mb-4">
+                                                    {currentRepo.description || "No description provided."}
+                                                </p>
+                                                <button
+                                                    onClick={() => setShowDetails(true)}
+                                                    className="mt-6 text-[#00ff00] hover:text-[#a6ffa6] text-lg sm:text-xl transition font-semibold flex items-center gap-2"
+                                                    aria-label="View more"
+                                                >
+                                                    <span>More Info</span>
+                                                    <span className="text-2xl">➡</span>
+                                                </button>
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                </AnimatePresence>
+                            </div>
+                        </div>
+                    ) : (
+                        // 🗂️ Grid View
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-20 gap-y-4">
+                            {repos.map((repo) => (
+                                <div key={repo.name} className="flip-card w-100 h-85 relative">
+                                    <div className="flip-inner w-full h-full relative">
+                                        {/* FRONT FACE */}
+                                        <div className="flip-front flex flex-col items-center justify-center text-center">
+                                            <img
+                                                src={projectSummaries[repo.name]?.icon || "/pixelated-portfolio.png"}
+                                                alt={`${repo.name} Icon`}
+                                                className="w-28 h-28 mx-auto mb-4 rounded-full"
+                                            />
+                                            <h3 className="text-xl mb-2 text-[#00ff00]">{repo.name}</h3>
+                                        </div>
+
+                                        {/* BACK FACE */}
+                                        <div className="flip-back text-center">
+                                            <p className="text-sm text-white mb-4">
+                                                {repo.description || "No description provided."}
+                                            </p>
+                                            <a
+                                                href={repo.html_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-[#00ff00] underline hover:text-[#a6ffa6]"
+                                            >
+                                                View on GitHub <span className="text-3xl">→</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
 
                 <AnimatePresence>
                     {showDetails && currentRepo && (

@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx}", // adjust as needed for your structure
   ],
   theme: {
     extend: {
@@ -18,5 +18,23 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // 👇 Custom utilities plugin for 3D flip effect
+    function ({ addUtilities }) {
+      addUtilities({
+        '.backface-hidden': {
+          'backface-visibility': 'hidden',
+        },
+        '.backface-visible': {
+          'backface-visibility': 'visible',
+        },
+        '.preserve-3d': {
+          'transform-style': 'preserve-3d',
+        },
+        '.perspective': {
+          perspective: '1000px',
+        },
+      });
+    }
+  ],
 };

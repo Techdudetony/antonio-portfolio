@@ -21,10 +21,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        {/* ✅ Optional: You could add meta tags here if needed */}
-      </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased cursor-none`}>
+      <head />
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased cursor-none relative bg-black text-white overflow-x-hidden`}>
+        {/* Faded Background Logo */}
+        <img
+          src="/logo.png"
+          alt="Background Logo"
+          className="fixed opacity-10 z-10 w-[70%] max-w-[1200px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none
+          invert brightness-[0.7] saturate-[10] hue-rotate-[90deg] contrast-[1.2]" 
+        />
+
         <PageTransitionWrapper>
           {children}
         </PageTransitionWrapper>
