@@ -53,6 +53,38 @@ export default function ProjectsPage() {
         }
     };
 
+    const mergeLibraryVariants = (deps = []) => {
+        const cleaned = new Set();
+
+        deps.forEach(dep => {
+            if (!dep || dep.startsWith("#")) return; // Skip comments and empty lines
+
+            // Normalize name: lowercase, remove version specs and extras
+            let base = dep.toLowerCase()
+                .replace(/^([^\s=><~!#]+).*/, "$1") // capture only name portion before any version or extras
+                .replace(/[^a-z0-9_\-]/gi, "");     // then clean leftover punctuation
+
+            // Remove _sip or similar variants
+            base = base.replace(/(_sip|_qt|-qt6|_core|_client)$/, "");
+
+            // Simplify common redundancies
+            const aliases = {
+                pyqt6_qt6: "pyqt6",
+                python_version: null,
+                urllib3: "urllib",
+                beautifulsoup4: "beautifulsoup",
+                beautifulsoup44123: "beautifulsoup",
+                certifi20241214: "certifi",
+                charsetnormalizer: "charset-normalizer"
+            };
+
+            if (aliases[base] === null) return; // Skip non-useful entries
+            cleaned.add(aliases[base] || base);
+        });
+
+        return [...cleaned];
+    };
+
     useEffect(() => {
         const fetchReposAndLanguages = async () => {
             try {
@@ -63,9 +95,24 @@ export default function ProjectsPage() {
                 // Fetch languages for each repo dynamically
                 const enrichedRepos = await Promise.all(
                     filtered.map(async (repo) => {
-                        const langRes = await fetch(repo.languages_url);
+                        const [langRes, depsRes] = await Promise.all([
+                            fetch(repo.languages_url),
+                            fetch(`https://raw.githubusercontent.com/${repo.owner.login}/${repo.name}/main/requirements.txt`).then(res => res.ok ? res.text() : ''), // fallback if not found
+                        ]);
+
                         const languages = await langRes.json();
-                        return { ...repo, languages };
+
+                        // Parse dependencies from requirements.txt
+                        const dependencies = depsRes
+                            ? depsRes
+                                .split("\n")
+                                .map(line => line.split("==")[0].split(">=")[0].split("<=")[0].trim()) // Remove versions
+                                .filter(line => line && !line.startsWith("#")) // Remove empty lines & comments
+                                .map(dep => dep.toLowerCase()) // Normalize for deduplication
+                            : [];
+
+                        const cleanedDependencies = mergeLibraryVariants(dependencies);
+                        return { ...repo, languages, dependencies: cleanedDependencies };
                     })
                 );
 
@@ -238,7 +285,7 @@ export default function ProjectsPage() {
                                         </div>
 
                                         {/* BACK FACE */}
-                                        <div className="flip-back text-center">
+                                        <div className="flip-back text-center px-4 py-6">
                                             <p className="text-sm text-white mb-4">
                                                 {repo.description || "No description provided."}
                                             </p>
@@ -250,6 +297,18 @@ export default function ProjectsPage() {
                                             >
                                                 View on GitHub <span className="text-3xl">→</span>
                                             </a>
+
+                                            {/* 🔧 Dependencies (Truncated) */}
+                                            <div className="flex flex-wrap justify-center gap-2 mt-4">
+                                                {repo.dependencies?.slice(0, 3).map((dep) => (
+                                                    <span
+                                                        key={dep}
+                                                        className="bg-[#00ff00] text-black text-xs font-pixel px-2 py-1 rounded-full"
+                                                    >
+                                                        {dep}
+                                                    </span>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -279,17 +338,43 @@ export default function ProjectsPage() {
                                 <span>View on GitHub </span>
                                 <span className="text-4xl">→</span>
                             </a>
-                            <div className="flex flex-wrap gap-4 mt-4">
-                                {currentRepo.languages &&
-                                    Object.keys(currentRepo.languages).map((lang) => (
-                                        <span
-                                            key={lang}
-                                            className="bg-[#00ff00] text-black text-s px-2 py-1 rounded-full"
-                                        >
-                                            {lang}
-                                        </span>
-                                    ))}
+                            
+                            <div className="mt-6 space-y-4">
+                                {/* 🧠 Languages Section */}
+                                {currentRepo.languages && (
+                                    <div>
+                                        <h3 className="text-[#00ff00] font-pixel text-base mb-2">Languages</h3>
+                                        <div className="flex flex-wrap gap-2">
+                                            {Object.keys(currentRepo.languages).map((lang) => (
+                                                <span
+                                                    key={lang}
+                                                    className="bg-[#00ff00] text-black font-pixel text-sm min-w-[90px] text-center px-2 py-1 rounded-full inline-block"
+                                                >
+                                                    {lang}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* 🧩 Dependencies Section */}
+                                {currentRepo.dependencies?.length > 0 && (
+                                    <div>
+                                        <h3 className="text-[#00ff00] font-pixel text-base mb-2">Dependencies</h3>
+                                        <div className="flex flex-wrap gap-2">
+                                            {currentRepo.dependencies.map((dep) => (
+                                                <span
+                                                    key={dep}
+                                                    className="bg-[#00ff00] text-black font-pixel text-sm min-w-[90px] text-center px-2 py-1 rounded-full inline-block"
+                                                >
+                                                    {dep}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
+
                             <button
                                 onClick={() => setShowDetails(false)}
                                 className="mt-8 bg-black text-[#00ff00] border border-[#00ff00] hover:bg-[#00ff00] hover:text-black font-semibold px-4 py-2 rounded transition"
