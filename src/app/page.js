@@ -58,7 +58,7 @@ export default function Home() {
 
           {/* Desktop Menu (hidden on small screens) */}
           <div className="hidden md:flex space-x-8 text-[#00ff00] font-pixel">
-            <a href="#about" className="hover:text-lime transition">About</a>
+            <Link href="/about" className="hover:text-lime transition">About</Link>
             <Link href="/projects" className="hover:text-lime transition">Projects</Link>
             <Link href="/designs" className="hover:text-lime transition">Designs</Link>
             <a href="/resume.pdf" className="hover:text-lime transition" target="_blank" rel="noopener noreferrer">Resume</a>
