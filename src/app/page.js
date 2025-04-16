@@ -14,6 +14,7 @@ import { EffectCoverflow, EffectFade, Autoplay, Pagination } from 'swiper/module
 export default function Home() {
   const spotlightRef = useRef(null);
   const [showButton, setShowButton] = useState(false) // For 'Back to Top' Button
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const timelineItems = [
     { year: "2012", label: "Started College" },
@@ -54,6 +55,7 @@ export default function Home() {
         {/* Sticky Nav */}
         <nav className="sticky top-0 z-50 backdrop-blur-md bg-black/50 px-8 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">Antonio Lee</h1>
+          {/* Desktop Menu */}
           <div className="space-x-8">
             <a href="#about" className="hover:text-lime transition">About</a>
             <Link href="/projects" className="hover:text-lime transition">Projects</Link>
@@ -61,7 +63,26 @@ export default function Home() {
             <a href="/resume.pdf" className="hover:text-lime transition" target="_blank" rel="noopener noreferrer">Resume</a>
             <a href="#contact" className="hover:text-lime transition">Contact</a>
           </div>
+          {/* Mobile Hamburger */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden text-[#00ff00] text-3xl focus:outline-none"
+            aria-label="Toggle Menu"
+          >
+            ☰
+          </button>
         </nav>
+
+        {/* Mobile Full-Screen Menu */}
+        {menuOpen && (
+          <div className="fixed inset-0 bg-black z-40 flex flex-col items-center justify-center text-3xl font-pixel text-[#00ff00] gap-8 transition-all">
+            <a onClick={() => setMenuOpen(false)} href="#about">About</a>
+            <Link onClick={() => setMenuOpen(false)} href="/projects">Projects</Link>
+            <Link onClick={() => setMenuOpen(false)} href="/designs">Designs</Link>
+            <a onClick={() => setMenuOpen(false)} href="/resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+            <a onClick={() => setMenuOpen(false)} href="#contact">Contact</a>
+          </div>
+        )}
 
         <section className="relative z-10 px-8 py-20 max-w-5xl mx-auto">
           <motion.h2
@@ -243,19 +264,19 @@ export default function Home() {
           </div>
         </section>
 
-      {showButton && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-4 right-4 z-50 bg-transparent border-none p-0 cursor-pointer"
-          aria-label="Back to top"
-        >
-          <img 
-            src="/up.png"
-            alt="Back to top"
-            className="w-12 h-12 drop-shadow-[0_0_6px_#00ff00] animate-pulse"
-          />
-        </button>
-      )}
+        {showButton && (
+          <button
+            onClick={scrollToTop}
+            className="fixed bottom-4 right-4 z-50 bg-transparent border-none p-0 cursor-pointer"
+            aria-label="Back to top"
+          >
+            <img
+              src="/up.png"
+              alt="Back to top"
+              className="w-12 h-12 drop-shadow-[0_0_6px_#00ff00] animate-pulse"
+            />
+          </button>
+        )}
       </main>
     </>
   );
