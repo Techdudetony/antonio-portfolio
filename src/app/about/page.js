@@ -121,24 +121,35 @@ export default function AboutPage() {
                     </motion.div>
                 </AnimatePresence>
 
-                <section className="space-y-6 text-gray-200 text-base sm:text-lg leading-relaxed mt-12">
-                    <p>
-                        I'm Antonio Lee — a developer with a passion for building smart, user-centered applications.
-                        Currently working as a QA Consultant at CarMax, I bring strong analytical expertise to every project — with a
-                        knack for catching the details others miss.
-                    </p>
+                <section className="px-8 py-20 max-w-4xl mx-auto text-gray-300">
+                    <h2 className="text-4xl font-pixel text-[#00ff00] mb-8 text-center">About Me</h2>
 
-                    <p>
-                        I’m pursuing my Bachelor’s in Computer Science with a specialization in Artificial Intelligence. Outside the
-                        classroom, I’m hands-on with Python, Kotlin, C++, and C# — building tools like Pokémon save editors,
-                        intelligent apps, and sleek UI-driven projects.
-                    </p>
+                    {/* Profile Image */}
+                    <div className="flex justify-center mb-10">
+                        <img
+                            src="/Antonio.png"
+                            alt="Antonio Lee"
+                            className="w-64 md:w-120 z-20 mask-fade-bottom"
+                        />
+                    </div>
 
-                    <p>
-                        When I’m not coding or testing, you’ll find me at anime conventions like GalaxyCon or Katsucon (cosplay
-                        included), gaming with friends, or hanging out with my dog Rocko. I’m all about blending logic with creativity —
-                        and I’m always up for an adventure that sparks innovation.
-                    </p>
+                    {/* Bio Text */}
+                    <div className="text-base md:text-lg leading-loose space-y-6">
+                        <p>
+                            My name is Antonio Lee — a developer with a passion for building smart, user-focused applications. With a background 
+                            in Computer Science and a specialization in Artificial Intelligence, I enjoy blending technical depth with creativity 
+                            to create digital experiences that feel thoughtful and intuitive.
+                        </p>
+                        <p>
+                            I currently work as a QA Consultant at CarMax, where I apply a detail-oriented mindset to uncover issues before they 
+                            impact users. This role has sharpened my ability to break down complex systems, identify edge cases, and improve product 
+                            quality across teams.
+                        </p>
+                        <p>
+                            Outside of tech, I enjoy anime, conventions like GalaxyCon and Katsucon, gaming with friends, and hanging out with my dog 
+                            Rocko. I am always seeking new adventures — whether that means learning a new framework or exploring a fresh creative idea.
+                        </p>
+                    </div>
                 </section>
 
                 <Link

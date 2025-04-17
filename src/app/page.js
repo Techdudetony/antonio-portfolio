@@ -14,7 +14,6 @@ import { EffectCoverflow, EffectFade, Autoplay, Pagination } from 'swiper/module
 export default function Home() {
   const spotlightRef = useRef(null);
   const [showButton, setShowButton] = useState(false) // For 'Back to Top' Button
-  const [menuOpen, setMenuOpen] = useState(false)
 
   const timelineItems = [
     { year: "2012", label: "Started College" },
@@ -51,64 +50,6 @@ export default function Home() {
           ref={spotlightRef}
           className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-300"
         />
-
-        {/* Sticky Nav */}
-        <nav className="sticky top-0 z-50 backdrop-blur-md bg-black/50 px-8 py-4 flex justify-between items-center">
-          <h1 className="text-2xl sm:text:2xl font-bold text-[#00ff00] font-pixel">Antonio Lee</h1>
-
-          {/* Desktop Menu (hidden on small screens) */}
-          <div className="hidden md:flex space-x-8 text-[#00ff00] font-pixel">
-            <Link href="/about" className="hover:text-lime transition">About</Link>
-            <Link href="/projects" className="hover:text-lime transition">Projects</Link>
-            <Link href="/designs" className="hover:text-lime transition">Designs</Link>
-            <a href="/resume.pdf" className="hover:text-lime transition" target="_blank" rel="noopener noreferrer">Resume</a>
-            <a href="#contact" className="hover:text-lime transition">Contact</a>
-          </div>
-
-          <motion.button
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle Menu"
-            className="md:hidden w-12 h-12 flex flex-col items-center justify-center gap-1 p-2 z-50 fixed top-4 right-4"
-            initial={false}
-            animate={menuOpen ? "open" : "closed"}
-          >
-            <motion.span
-              className="block w-8 h-[2px] bg-[#00ff00] origin-center"
-              variants={{
-                open: { rotate: 45, y: 5 },
-                closed: { rotate: 0, y: 0 },
-              }}
-              transition={{ duration: 0.3 }}
-            />
-            <motion.span
-              className="block w-8 h-[2px] bg-[#00ff00] origin-center"
-              variants={{
-                open: { opacity: 0 },
-                closed: { opacity: 1 },
-              }}
-              transition={{ duration: 0.2 }}
-            />
-            <motion.span
-              className="block w-8 h-[2px] bg-[#00ff00] origin-center"
-              variants={{
-                open: { rotate: -45, y: -5 },
-                closed: { rotate: 0, y: 0 },
-              }}
-              transition={{ duration: 0.3 }}
-            />
-          </motion.button>
-        </nav>
-
-        {/* Mobile Full-Screen Menu */}
-        {menuOpen && (
-          <div className="fixed inset-0 bg-black z-40 flex flex-col items-center justify-center text-3xl font-pixel text-[#00ff00] gap-8 transition-all">
-            <a onClick={() => setMenuOpen(false)} href="#about">About</a>
-            <Link onClick={() => setMenuOpen(false)} href="/projects">Projects</Link>
-            <Link onClick={() => setMenuOpen(false)} href="/designs">Designs</Link>
-            <a onClick={() => setMenuOpen(false)} href="/resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
-            <a onClick={() => setMenuOpen(false)} href="#contact">Contact</a>
-          </div>
-        )}
 
         <section className="relative z-10 px-8 py-20 max-w-5xl mx-auto">
           <motion.h2
@@ -190,19 +131,17 @@ export default function Home() {
 
           {/* About Section */}
           <div id="about">
-            <h2 className="text-3xl font-bold mb-4">About Me</h2>
-            <p className="text-base leading-relaxed text-gray-300 mb-4">
-              I’m a developer with a passion for building smart, user-centered applications. Currently working as a QA Consultant at CarMax, I bring
-              strong analytical expertise to every project — with a knack for catching the details others miss.
+            <h2 className="text-3xl font-bold mb-4 text-[#00ff00] font-pixel">About Me</h2>
+            <p className="text-base leading-relaxed text-gray-300 mb-6">
+              Developer with a passion for blending logic and creativity. I bring QA precision from CarMax,
+              a Computer Science background in AI, and a love for design, Pokémon, and tech that sparks curiosity.
             </p>
-            <p className="text-base leading-relaxed text-gray-300 mb-4">
-              I’m pursuing my Bachelor’s in Computer Science with a specialization in Artificial Intelligence. Outside the classroom, I’m hands-on
-              with Python, Kotlin, C++, and C# — building tools like Pokémon save file editors, intelligent apps, and sleek UI-driven projects.
-            </p>
-            <p className="text-base leading-relaxed text-gray-300">
-              When I’m not coding or testing, you’ll find me at anime conventions like GalaxyCon or Katsucon (cosplay included), gaming with friends,
-              or hanging out with my dog Rocko. I’m all about blending logic with creativity — and I’m always up for an adventure that sparks innovation.
-            </p>
+            <Link
+              href="/about"
+              className="inline-block px-6 py-3 border-2 border-[#00ff00] text-[#00ff00] font-pixel tracking-widest hover:bg-[#00ff00] hover:text-black transition"
+            >
+              Learn More About Me <span className="text-3xl">→</span>
+            </Link>
           </div>
         </section>
 

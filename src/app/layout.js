@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@fontsource/press-start-2p";
 import "./globals.css";
 import PageTransitionWrapper from "./components/PageTransitionWrapper";
+import StickyNav from "./components/StickyNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,14 +24,19 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased cursor-none relative bg-black text-white overflow-x-hidden`}>
+        
+        {/* Sticky Navigation Bar */}
+        <StickyNav />   
+
         {/* Faded Background Logo */}
         <img
           src="/logo.png"
           alt="Background Logo"
           className="fixed opacity-10 z-10 w-[70%] max-w-[1200px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none
-          invert brightness-[0.7] saturate-[10] hue-rotate-[90deg] contrast-[1.2]" 
+          invert brightness-[0.7] saturate-[10] hue-rotate-[90deg] contrast-[1.2]"
         />
 
+        {/* Page content with transition wrapper */}
         <PageTransitionWrapper>
           {children}
         </PageTransitionWrapper>
