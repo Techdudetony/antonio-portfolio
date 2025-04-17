@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const messages = [
     "A wild bug appeared!",
@@ -55,12 +56,12 @@ export default function GlitchZone() {
                 )}
             </div>
 
-            <a
+            <Link
                 href="/"
                 className="mt-10 inline-block px-6 py-3 border-2 border-[#00ff00] text-[#00ff00] font-pixel tracking-widest hover:bg-[#00ff00] hover:text-black transition"
             >
                 Back to Safety →
-            </a>
+            </Link>
         </main>
     );
 }
