@@ -6,7 +6,6 @@ import Link from "next/link";
 
 const messages = [
     "A wild bug appeared!",
-    "This page rolled a natural 1.",
     "You stepped into the Glitch Zone.",
     "This route is currently blocked by invisible walls.",
     "It’s dangerous to go alone... especially here."
