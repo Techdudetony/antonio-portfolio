@@ -41,7 +41,7 @@ export default function SkillsCarousel({ title, items }) {
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               className="bg-black border-4 border-[#00ff00] rounded-md h-32 w-48 flex flex-col justify-center items-center px-4 text-center hover:bg-[#00ff00] 
-              hover:text-black text-sm font-pixel text-[#00ff00] transition-all mb-8"
+              hover:text-black text-sm font-pixel text-[#00ff00] transition-allZZ"
             >
               {name}
             </motion.a>
