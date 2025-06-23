@@ -2,10 +2,11 @@
 
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Fragment } from "react";
 import projectSummaries from "./projectSummaries";
 import Link from "next/link";
 import { Typewriter } from "react-simple-typewriter";
+import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react"
 
 export default function ProjectsPage() {
     const [repos, setRepos] = useState([]);
@@ -15,6 +16,13 @@ export default function ProjectsPage() {
     const [isLoadingRepos, setIsLoadingRepos] = useState(true);
     const [reposError, setReposError] = useState(false);
     const [viewMode, setViewMode] = useState("grid");
+    const [selectedDeps, setSelectedDeps] = useState([]) // [] <- array for Multi-select
+    const [majorDependencies, setMajorDependencies] = useState([]);
+    const [majorLanguages, setMajorLanguages] = useState([]);
+    const [selectedLangs, setSelectedLangs] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [pendingLangs, setPendingLangs] = useState([]);
+    const [pendingDeps, setPendingDeps] = useState([]);
 
     const [scrollCooldown, setScrollCooldown] = useState(false);
     const touchStartY = useRef(0);
@@ -78,12 +86,16 @@ export default function ProjectsPage() {
                 charsetnormalizer: "charset-normalizer"
             };
 
-            if (aliases[base] === null) return; // Skip non-useful entries
+            if (!base || aliases[base] === null) return; // Skip non-useful entries
             cleaned.add(aliases[base] || base);
         });
 
         return [...cleaned];
     };
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [selectedLangs, selectedDeps, searchTerm]);
 
     useEffect(() => {
         const fetchReposAndLanguages = async () => {
@@ -125,6 +137,37 @@ export default function ProjectsPage() {
                 };
 
                 setRepos([...enrichedRepos, externalProject]);
+
+                // Determine major languages from all repos
+                const langSet = new Set();
+                enrichedRepos.forEach((repo) => {
+                    Object.keys(repo.languages || {}).forEach((lang) => langSet.add(lang));
+                });
+                setMajorLanguages([...langSet].sort());
+
+                // Count frequency of dependencies across all repos
+                const depCounts = {};
+                enrichedRepos.forEach((repo) => {
+                    (repo.dependencies || []).forEach((dep) => {
+                        depCounts[dep] = (depCounts[dep] || 0) + 1;
+                    });
+                });
+
+                // Determine major dependencies by frequency threshold or keyword
+                const majorDependencies = Object.keys(depCounts).filter(
+                    (dep) =>
+                        depCounts[dep] > 1 || // used in more than 1 project
+                        ["fastapi", "lightgbm", "tailwind", "react", "pyqt", "sklearn", "xgboost", "uvicorn"].some((keyword) =>
+                            dep.includes(keyword)
+                        )
+                );
+
+                // Optional: sort them alphabetically or by count
+                majorDependencies.sort((a, b) => depCounts[b] - depCounts[a]);
+
+                // Save to state
+                setMajorDependencies(majorDependencies);
+
                 setIsLoadingRepos(false);
                 setReposError(enrichedRepos.length === 0);
             } catch (error) {
@@ -137,8 +180,22 @@ export default function ProjectsPage() {
         fetchReposAndLanguages();
     }, []);
 
-    const totalPages = Math.ceil(repos.length / perPage);
-    const currentRepo = repos[currentPage];
+    const filteredRepos = repos.filter((repo) => {
+        const repoLangs = Object.keys(repo.languages || {});
+        const repoDeps = repo.dependencies || [];
+
+        const langMatch = selectedLangs.length === 0 || selectedLangs.some((l) => repoLangs.includes(l));
+        const depsMatch = selectedDeps.length === 0 || selectedDeps.every((dep) => repoDeps.includes(dep));
+        const searchMatch =
+            searchTerm.trim() === "" ||
+            repo.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (repo.description || "").toLowerCase().includes(searchTerm.toLowerCase());
+
+        return langMatch && depsMatch && searchMatch;
+    });
+
+    const totalPages = Math.ceil(filteredRepos.length / perPage);
+    const currentRepo = filteredRepos[currentPage % filteredRepos.length] || null;
 
     const [direction, setDirection] = useState(0);
     const paginate = (newDirection) => {
@@ -201,18 +258,124 @@ export default function ProjectsPage() {
             <div className="flex justify-center gap-4 mb-8">
                 <button
                     onClick={() => setViewMode("scroll")}
-                    className={`font-pixel border-2 px-4 py-2 ${viewMode === "scroll" ? "bg-[#00ff00] text-black" : "bg-black text-[#00ff00]"
+                    className={`font-pixel border-2 px-4 py-2 ${viewMode === "scroll"
+                        ? "bg-[#00ff00] text-black"
+                        : "bg-black text-[#00ff00]"
                         }`}
                 >
                     🎰 Scroll View
                 </button>
                 <button
                     onClick={() => setViewMode("grid")}
-                    className={`font-pixel border-2 px-4 py-2 ${viewMode === "grid" ? "bg-[#00ff00] text-black" : "bg-black text-[#00ff00]"
+                    className={`font-pixel border-2 px-4 py-2 ${viewMode === "grid"
+                        ? "bg-[#00ff00] text-black"
+                        : "bg-black text-[#00ff00]"
                         }`}
                 >
                     🗂️ Grid View
                 </button>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 relative z-10">
+                {/* 🔍 Search Bar */}
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search projects..."
+                    className="font-pixel px-4 py-2 rounded bg-black text-[#00ff00] border border-[#00ff00] w-full sm:w-64"
+                />
+
+                {/* ⚙️ Filter Popover */}
+                <Popover className="relative">
+                    {({ open }) => (
+                        <>
+                            <PopoverButton className="font-pixel px-4 py-2 border border-[#00ff00] text-[#00ff00] bg-black rounded">
+                                Filter ▾
+                            </PopoverButton>
+
+                            <Transition
+                                as={Fragment}
+                                show={open}
+                                enter="transition ease-out duration-200"
+                                enterFrom="opacity-0 translate-y-2"
+                                enterTo="opacity-100 translate-y-0"
+                                leave="transition ease-in duration-150"
+                                leaveFrom="opacity-100 translate-y-0"
+                                leaveTo="opacity-0 translate-y-2"
+                            >
+                                <PopoverPanel className="absolute z-50 mt-2 w-[40rem] bg-black border border-[#00ff00] rounded p-4 shadow-xl">
+                                    <h3 className="text-[#00ff00] font-pixel mb-2">Languages</h3>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+                                        {majorLanguages.sort().map((lang) => (
+                                            <label key={lang} className="flex items-center gap-2 px-2 py-1 rounded hover:bg-[#00ff00]/20 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={pendingLangs.includes(lang)}
+                                                    onChange={() =>
+                                                        setPendingLangs((prev) =>
+                                                            prev.includes(lang)
+                                                                ? prev.filter((l) => l !== lang)
+                                                                : [...prev, lang]
+                                                        )
+                                                    }
+                                                    className="accent-[#00ff00]"
+                                                />
+                                                <span className="text-[#00ff00] font-pixel text-sm">{lang}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+
+                                    <h3 className="text-[#00ff00] font-pixel mb-2">Dependencies</h3>
+                                    <div className="gird grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+                                        {majorDependencies.sort().map((dep) => (
+                                            <label key={dep} className="flex items-center gap-2 px-2 py-1 rounded hover:bg-[#00ff00]/20 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={pendingDeps.includes(dep.toLowerCase())}
+                                                    onChange={() =>
+                                                        setPendingDeps((prev) =>
+                                                            prev.includes(dep.toLowerCase())
+                                                                ? prev.filter((d) => d !== dep.toLowerCase())
+                                                                : [...prev, dep.toLowerCase()]
+                                                        )
+                                                    }
+                                                    className="accent-[#00ff00]"
+                                                />
+                                                <span className="text-[#00ff00] font-pixel text-sm truncate text-ellipsis overflow-hidden">{dep}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex justify-end mt-4 gap-2">
+                                        <button
+                                            onClick={() => {
+                                                setSelectedLangs(pendingLangs);
+                                                setSelectedDeps(pendingDeps);
+                                            }}
+                                            className="w-full font-pixel px-4 py-2 border border-[#00ff00] text-[#00ff00] hover:bg-[#00ff00] hover:text-black rounded"
+                                        >
+                                            Apply Filters
+                                        </button>
+
+                                        <button
+                                            onClick={() => {
+                                                setPendingLangs([]);
+                                                setPendingDeps([]);
+                                                setSelectedLangs([]);
+                                                setSelectedDeps([]);
+                                                setSearchTerm("");
+                                            }}
+                                            className="w-full font-pixel px-4 py-2 border border-[#00ff00] text-[#00ff00] hover:bg-[#00ff00] hover:text-black rounded"
+                                        >
+                                            Clear Filters
+                                        </button>
+                                    </div>
+                                </PopoverPanel>
+                            </Transition>
+                        </>
+                    )}
+                </Popover>
             </div>
 
             <div className={`relative max-w-6xl mx-auto ${viewMode === "scroll" ? "h-[500px]" : "h-auto"}`}>
@@ -271,7 +434,7 @@ export default function ProjectsPage() {
                     ) : (
                         // 🗂️ Grid View
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-20 gap-y-4">
-                            {repos.map((repo) => (
+                            {filteredRepos.map((repo) => (
                                 <div key={repo.name} className="flip-card w-95 sm:w-80 md:w-96 h-80 sm:h-96 mx-auto">
                                     <div className="flip-inner w-full h-full relative">
                                         {/* FRONT FACE */}
@@ -338,7 +501,7 @@ export default function ProjectsPage() {
                                 <span>View on GitHub </span>
                                 <span className="text-4xl">→</span>
                             </a>
-                            
+
                             <div className="mt-6 space-y-4">
                                 {/* 🧠 Languages Section */}
                                 {currentRepo.languages && (
