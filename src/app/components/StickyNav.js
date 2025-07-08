@@ -14,11 +14,15 @@ export default function StickyNav() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex space-x-8 text-[#00ff00] font-pixel">
-            <Link href="/" className="hover:text-lime transition">Home</Link>
+          <Link href="/" className="hover:text-lime transition">Home</Link>
           <Link href="/about" className="hover:text-lime transition">About</Link>
           <Link href="/projects" className="hover:text-lime transition">Projects</Link>
           <Link href="/designs" className="hover:text-lime transition">Designs</Link>
-          <a href="/resume.pdf" className="hover:text-lime transition" target="_blank" rel="noopener noreferrer">Resume</a>
+          <a
+            href="https://raw.githubusercontent.com/Techdudetony/my-resume/main/Antonio%20Lee%20Resume.pdf"
+            className="hover:text-lime transition"
+            target="_blank"
+            rel="noopener noreferrer">Resume</a>
           <Link href="/#contact" className="hover:text-lime transition">Contact</Link>
           <Link href="/glitch-zone" className="hover:text-lime transition">Glitch Zone</Link>
         </div>
@@ -52,7 +56,11 @@ export default function StickyNav() {
           <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
           <Link href="/projects" onClick={() => setMenuOpen(false)}>Projects</Link>
           <Link href="/designs" onClick={() => setMenuOpen(false)}>Designs</Link>
-          <a href="/resume.pdf" onClick={() => setMenuOpen(false)} target="_blank" rel="noopener noreferrer">Resume</a>
+          <a
+            href="https://raw.githubusercontent.com/Techdudetony/my-resume/main/Antonio%20Lee%20Resume.pdf"
+            onClick={() => setMenuOpen(false)}
+            target="_blank"
+            rel="noopener noreferrer">Resume</a>
           <Link href="/#contact" onClick={() => setMenuOpen(false)}>Contact</Link>
         </div>
       )}
