@@ -116,7 +116,7 @@ export default function Home() {
               loop={true}
               className="w-full h-full"
             >
-              {['me.jpg', 'me2.jpg', 'me3.jpg', 'me4.jpg', 'me6.jpg', 'me7.jpg', 'me8.jpg'].map((src, i) => (
+              {['me.jpg', 'me2.jpg', 'me3.jpg', 'me4.jpg', 'me6.jpg', 'me7.jpg', 'me8.jpg', 'me9.jpg'].map((src, i) => (
                 <SwiperSlide key={i}>
                   <img
                     src={`/${src}`}
