@@ -19,7 +19,7 @@ export default function StickyNav() {
           <Link href="/projects" className="hover:text-lime transition">Projects</Link>
           <Link href="/designs" className="hover:text-lime transition">Designs</Link>
           <a
-            href="https://raw.githubusercontent.com/Techdudetony/my-resume/main/Antonio%20Lee%20Resume.pdf"
+            href="https://github.com/Techdudetony/my-resume/blob/main/Antonio%20Lee%20Resume.pdf"
             className="hover:text-lime transition"
             target="_blank"
             rel="noopener noreferrer">Resume</a>
@@ -57,7 +57,7 @@ export default function StickyNav() {
           <Link href="/projects" onClick={() => setMenuOpen(false)}>Projects</Link>
           <Link href="/designs" onClick={() => setMenuOpen(false)}>Designs</Link>
           <a
-            href="https://raw.githubusercontent.com/Techdudetony/my-resume/main/Antonio%20Lee%20Resume.pdf"
+            href="https://github.com/Techdudetony/my-resume/blob/main/Antonio%20Lee%20Resume.pdf"
             onClick={() => setMenuOpen(false)}
             target="_blank"
             rel="noopener noreferrer">Resume</a>
