@@ -3,6 +3,7 @@ import "@fontsource/press-start-2p";
 import "./globals.css";
 import PageTransitionWrapper from "./components/PageTransitionWrapper";
 import StickyNav from "./components/StickyNav";
+import ChatBotWidget from "./components/ChatBotWidget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,9 +25,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased cursor-none relative bg-black text-white overflow-x-hidden`}>
-        
+
         {/* Sticky Navigation Bar */}
-        <StickyNav />   
+        <StickyNav />
 
         {/* Faded Background Logo */}
         <img
@@ -39,6 +40,7 @@ export default function RootLayout({ children }) {
         {/* Page content with transition wrapper */}
         <PageTransitionWrapper>
           {children}
+          <ChatBotWidget />
         </PageTransitionWrapper>
       </body>
     </html>
